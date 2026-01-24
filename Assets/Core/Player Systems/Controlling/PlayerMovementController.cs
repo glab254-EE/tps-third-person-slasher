@@ -1,27 +1,32 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMovementController : MonoBehaviour
 {
+    [Header("Set-Up")]
     [field:SerializeField]
     private AnimatorHandler animator;
     [field:SerializeField]
     private PlayerInputListener listener;
     [field:SerializeField]
-
     private CameraBehaviour cameraBehaviour;
     [field:SerializeField]
     private PlayerHealthHandler playerHealth;
+    [Header("Stats")]
+    [field:SerializeField]
+    private InputActionReference ToggleLookForwardBind;
+    [Header("Animations")]
     [field:SerializeField]
     private float MoveAnimationThreshold = 0.1f;
+    [Header("Stats")]
     [field:SerializeField]
     private float PlayerMaxSpeed;
     [field:SerializeField]
     private float PlayerAcceloration = 2;
     [field:SerializeField]
-    internal bool LookForward = false;
-    [field:SerializeField]
     private float PlayerTurnSpeed = 10;
+    internal bool LookForward = false;
     internal bool CanMove {get;private set;} = true;
     private bool IsAlive = true;
     private Vector3 CurrentSpeed = new();
@@ -30,6 +35,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         playerHealth.OnDamaged += OnPlayerDamaged;
         rb = GetComponent<Rigidbody>();
+        listener.ConnectEventToKeybind(ToggleLookForwardBind,ToggleLookForward);
     }
     void Update()
     {
@@ -61,8 +67,6 @@ public class PlayerMovementController : MonoBehaviour
     }
     void HandleLook()
     {
-        Quaternion targetLookVector = new();
-
         Vector3 NoYVector = rb.linearVelocity;
 
         if (LookForward)
@@ -77,7 +81,7 @@ public class PlayerMovementController : MonoBehaviour
         if (NoYVector == Vector3.zero)
             return;
 
-        targetLookVector = Quaternion.LookRotation(NoYVector);
+        Quaternion targetLookVector = Quaternion.LookRotation(NoYVector);
 
         transform.rotation = Quaternion.Slerp(transform.rotation,targetLookVector,PlayerTurnSpeed*Time.deltaTime);
     }
@@ -91,5 +95,9 @@ public class PlayerMovementController : MonoBehaviour
         {
             animator.SetAnimatorBool("Walking",false);
         }
+    }
+    void ToggleLookForward(InputAction.CallbackContext _)
+    {
+        LookForward = !LookForward;
     }
 }

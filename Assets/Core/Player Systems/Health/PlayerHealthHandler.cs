@@ -25,6 +25,9 @@ public class PlayerHealthHandler : MonoBehaviour, IDamagable
         Godded = true;
         Task.Run(GoddedTask);
         OnDamaged.Invoke(Health);
+        #if UNITY_EDITOR
+        Debug.Log(Health);
+        #endif
         return true;
     }
     private async Task GoddedTask()

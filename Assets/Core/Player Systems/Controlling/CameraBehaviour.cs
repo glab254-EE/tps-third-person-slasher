@@ -14,14 +14,13 @@ public class CameraBehaviour : MonoBehaviour
     }
     void Update()
     {
-        if (CameraControlsEnabled && !IsInputsEnabled())
+        if (CameraControlsEnabled && CameraLocked && !IsInputsEnabled())
         {
             SetEnabledInputs(true);
-        } else if (!CameraControlsEnabled && IsInputsEnabled())
+        } else if ((!CameraControlsEnabled || !CameraLocked) && IsInputsEnabled())
         {
             SetEnabledInputs(false);
         }
-
         if (CameraLocked && Cursor.lockState != CursorLockMode.Locked)
         {
             Cursor.lockState = CursorLockMode.Locked;
