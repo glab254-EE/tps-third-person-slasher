@@ -449,7 +449,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""762a5d14-c43f-42c8-8b5c-9879805c7429"",
-                    ""path"": ""<Keyboard>/tab"",
+                    ""path"": ""<Keyboard>/rightAlt"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",

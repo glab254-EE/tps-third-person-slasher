@@ -23,8 +23,8 @@
   <Project Path="Unity.VisualScripting.State.Editor.csproj" />
   <Project Path="Unity.TestTools.CodeCoverage.Editor.csproj" />
   <Project Path="Unity.VisualScripting.State.csproj" />
-  <Project Path="Unity.Performance.Profile-Analyzer.Editor.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="Unity.Performance.Profile-Analyzer.Editor.csproj" />
   <Project Path="UnityEditor.UI.csproj" />
   <Project Path="Unity.TextMeshPro.csproj" />
   <Project Path="Unity.VisualScripting.SettingsProvider.Editor.csproj" />

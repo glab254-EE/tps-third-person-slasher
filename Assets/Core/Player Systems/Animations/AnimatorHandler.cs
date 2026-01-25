@@ -10,7 +10,7 @@ public class AnimatorHandler : MonoBehaviour
     {
         animator = GetComponent<Animator>();
     }
-    internal void SetAnimator(AnimatorController controller)
+    internal void SetAnimator(RuntimeAnimatorController controller)
     {
         if (controller == null || animator.runtimeAnimatorController == controller)
             return;

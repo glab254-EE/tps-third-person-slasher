@@ -13,7 +13,7 @@ public class PlayerInputListener : MonoBehaviour
     internal Vector2 AxisOutput {get;private set;}= new();
     internal Vector3 MovementVector3 {get;private set;}= new();
     internal bool MouseLocked {get;private set;} = false;
-    private Dictionary<InputActionReference,UnityEvent<InputAction.CallbackContext>> Connections = new();
+    private Dictionary<InputActionReference,Dictionary<string,UnityAction<InputAction.CallbackContext,bool>>> Connections = new();
     private InputSystem_Actions inputActions;
     void Start()
     {
@@ -42,29 +42,48 @@ public class PlayerInputListener : MonoBehaviour
 
         MovementVector3 = _movementVector.normalized;
     }
-    public void ConnectEventToKeybind(InputActionReference keybind, UnityAction<InputAction.CallbackContext> action)
+    public void ConnectEventToKeybind(InputActionReference keybind, UnityAction<InputAction.CallbackContext> action,bool activateOnCancel = false,bool once = false)
     {
         if (!Connections.ContainsKey(keybind))
         {
             Connections.Add(keybind,new());
 
-            keybind.action.performed += callback => Connections[keybind]?.Invoke(callback);
+            keybind.action.performed += callback => SetupConnectionCallbacks(Connections[keybind],callback,true);
+            keybind.action.canceled += callback => SetupConnectionCallbacks(Connections[keybind],callback,false);
 
             if (!keybind.action.enabled) 
                 keybind.action.Enable();
         }
-        Connections[keybind].AddListener(action);
+        Connections[keybind].Add(action.ToString(),(callbackContext, active) =>
+        {
+            if (activateOnCancel || active)
+            {
+                action(callbackContext);    
+                if (once)
+                {
+                    DissconectEventFromKeybind(keybind,action);
+                }            
+            }
+        });
     }
     public void DissconectEventFromKeybind(InputActionReference keybind, UnityAction<InputAction.CallbackContext> action)
     {
         if (Connections.ContainsKey(keybind))
         {
-            Connections[keybind]?.RemoveListener(action);
+            Connections[keybind]?.Remove(action.ToString());
         }
     }
-    private void OnMouseLock(InputAction.CallbackContext t)
+    private void SetupConnectionCallbacks(Dictionary<string,UnityAction<InputAction.CallbackContext,bool>> connected,InputAction.CallbackContext callback,bool active = true)
     {
-        if (!t.ReadValueAsButton()) return;
+        if (connected == null) return;
+        foreach (KeyValuePair<string,UnityAction<InputAction.CallbackContext,bool>> pairs in connected)
+        {
+            pairs.Value?.Invoke(callback,active);
+        }
+    }
+    private void OnMouseLock(InputAction.CallbackContext callBack)
+    {
+        if (!callBack.ReadValueAsButton()) return;
         MouseLocked = !MouseLocked;
     }
 }
