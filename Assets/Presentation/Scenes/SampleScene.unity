@@ -1133,13 +1133,29 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 773808347613554697, guid: 421b2fbe071147a4b96953aeca86aa73, type: 3}
+      propertyPath: RollKey
+      value: 
+      objectReference: {fileID: -7471211009204490832, guid: 289c1b55c9541489481df5cc06664110, type: 3}
+    - target: {fileID: 773808347613554697, guid: 421b2fbe071147a4b96953aeca86aa73, type: 3}
       propertyPath: listener
       value: 
       objectReference: {fileID: 586238200}
     - target: {fileID: 773808347613554697, guid: 421b2fbe071147a4b96953aeca86aa73, type: 3}
+      propertyPath: PlayerRollSpeed
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 773808347613554697, guid: 421b2fbe071147a4b96953aeca86aa73, type: 3}
       propertyPath: cameraBehaviour
       value: 
       objectReference: {fileID: 613284036}
+    - target: {fileID: 773808347613554697, guid: 421b2fbe071147a4b96953aeca86aa73, type: 3}
+      propertyPath: PlayerRollCooldown
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 773808347613554697, guid: 421b2fbe071147a4b96953aeca86aa73, type: 3}
+      propertyPath: PlayerRollDuration
+      value: 0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 773808347613554697, guid: 421b2fbe071147a4b96953aeca86aa73, type: 3}
       propertyPath: ToggleLookForwardBind
       value: 

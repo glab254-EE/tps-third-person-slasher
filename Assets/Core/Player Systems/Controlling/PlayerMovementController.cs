@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,9 +15,11 @@ public class PlayerMovementController : MonoBehaviour
     private CameraBehaviour cameraBehaviour;
     [field:SerializeField]
     private PlayerHealthHandler playerHealth;
-    [Header("Stats")]
+    [Header("Input")]
     [field:SerializeField]
     private InputActionReference ToggleLookForwardBind;
+    [field:SerializeField]
+    private InputActionReference RollKey;
     [Header("Animations")]
     [field:SerializeField]
     private float MoveAnimationThreshold = 0.1f;
@@ -26,16 +30,25 @@ public class PlayerMovementController : MonoBehaviour
     private float PlayerAcceloration = 2;
     [field:SerializeField]
     private float PlayerTurnSpeed = 10;
+    [field:SerializeField]
+    private float PlayerRollSpeed = 4;
+    [field:SerializeField]
+    private float PlayerRollDuration = 1f;
+    [field:SerializeField]
+    private float PlayerRollCooldown = 1f;
     internal bool LookForward = false;
     internal bool CanMove {get;private set;} = true;
+    internal bool CanRoll {get;private set;} = true;
     private bool IsAlive = true;
     private Vector3 CurrentSpeed = new();
+    private Vector3 OverrideTargetSpeed = new();
     private Rigidbody rb;
     void Start()
     {
         playerHealth.OnDamaged += OnPlayerDamaged;
         rb = GetComponent<Rigidbody>();
         listener.ConnectEventToKeybind(ToggleLookForwardBind,ToggleLookForward);
+        listener.ConnectEventToKeybind(RollKey,OnRollButtonPress);
     }
     void Update()
     {
@@ -43,21 +56,23 @@ public class PlayerMovementController : MonoBehaviour
         {
             HandleMovement();
             HandleLook();
-            HandleAnimations();
         }
+        HandleAnimations();
         cameraBehaviour.CameraLocked = listener.MouseLocked;
     }
     void OnPlayerDamaged(double currentHealth)
     {
         IsAlive = currentHealth>0;
         CanMove = CanMove && IsAlive;
+        CanRoll = IsAlive;
     }
     void HandleMovement()
     {
-        
         CurrentSpeed = rb.linearVelocity;
 
         Vector3 targetSpeed = listener.MovementVector3 * PlayerMaxSpeed;
+
+        if (OverrideTargetSpeed != Vector3.zero) targetSpeed = OverrideTargetSpeed;
 
         targetSpeed.y = CurrentSpeed.y;
 
@@ -99,5 +114,32 @@ public class PlayerMovementController : MonoBehaviour
     void ToggleLookForward(InputAction.CallbackContext _)
     {
         LookForward = !LookForward;
+    }
+    void OnRollButtonPress(InputAction.CallbackContext callbackContext)
+    {
+        if (CanMove && CanRoll && callbackContext.ReadValueAsButton() && listener.MovementVector3.magnitude > 0)
+        {
+            animator.SetAnimatorTrigger("Roll");
+            Task.Run(RollTask);
+        }
+    }
+    Task RollTask()
+    {
+
+        CanRoll = false;
+        
+        Vector3 _targetSpeed = listener.MovementVector3.normalized * PlayerRollSpeed;
+
+        OverrideTargetSpeed = _targetSpeed;
+
+        Task.Delay(Mathf.RoundToInt(PlayerRollDuration*1000)).Wait();
+
+        OverrideTargetSpeed = Vector3.zero;
+
+        Task.Delay(Mathf.RoundToInt(PlayerRollCooldown*1000)).Wait();
+
+        CanRoll = true;
+
+        return Task.CompletedTask;
     }
 }
