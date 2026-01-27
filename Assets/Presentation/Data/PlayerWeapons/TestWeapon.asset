@@ -25,8 +25,8 @@ MonoBehaviour:
       Duration: 1
       Cooldown: 0
     - AttackAnimationName: Attack1
-      HitboxOffset: {x: 0, y: 0, z: 0}
-      HitboxSize: {x: 0, y: 0, z: 0}
+      HitboxOffset: {x: 0, y: 0, z: 0.5}
+      HitboxSize: {x: 1, y: 2, z: 1}
       Damage: 1
       AttackWindupTime: 0.4
       Duration: 1
