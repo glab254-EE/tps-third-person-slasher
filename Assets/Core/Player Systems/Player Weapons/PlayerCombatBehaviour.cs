@@ -78,16 +78,29 @@ public class PlayerCombatBehaviour : MonoBehaviour
                 foreach (AttackSettings attack in pattern.Pattern)
                 {
                     PlayerAnimatorHandler.SetAnimatorTrigger(attack.AttackAnimationName);
-                    Cooldown = attack.AttackWindupTime + attack.Duration + attack.Cooldown + 0.5f; // 'failsafe' for cooldown.
+                    Cooldown = attack.AttackWindupTime + attack.Duration + attack.Cooldown + 0.1f; // 'failsafe' for cooldown.
                     yield return new WaitForSeconds(attack.AttackWindupTime);
-                    // TODO: ADD HITBOX
-                    Debug.Log(attack.Damage);
+                    HandleHit(attack);
                     yield return new WaitForSeconds(attack.Duration);
                     Cooldown = attack.Cooldown;
                 }
                 CanAttack = true;
                 currentComboIndex = Mathf.Clamp(currentComboIndex + 1, 0, CurrentTool.AttackCombos.Count-1);
             }
+        }
+    }
+    void HandleHit(AttackSettings attack)
+    {
+        if (attack.Damage > 0 && attack.HitboxSize.magnitude > 0 && HitboxReference != null)
+        {
+            Vector3 origin = HitboxReference.position;
+
+            origin += HitboxReference.forward * attack.HitboxOffset.z;
+            origin += HitboxReference.right * attack.HitboxOffset.x;
+            origin += HitboxReference.up * attack.HitboxOffset.y;
+
+            bool HaveHitSomething = StatcHitboxCreator.TryHitWithBoxHitbox(origin,attack.HitboxSize,EnemyMask,attack.Damage,false,HitboxReference.rotation);
+            Debug.Log(HaveHitSomething);
         }
     }
     void HandleToolVisual()

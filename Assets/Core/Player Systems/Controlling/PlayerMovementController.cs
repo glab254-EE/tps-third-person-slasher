@@ -126,15 +126,22 @@ public class PlayerMovementController : MonoBehaviour
     Task RollTask()
     {
 
+        bool _oldlook = LookForward;
+
+
+        Vector3 _targetSpeed = listener.MovementVector3.normalized * PlayerRollSpeed;
+
         CanRoll = false;
         
-        Vector3 _targetSpeed = listener.MovementVector3.normalized * PlayerRollSpeed;
+        LookForward = false;
 
         OverrideTargetSpeed = _targetSpeed;
 
         Task.Delay(Mathf.RoundToInt(PlayerRollDuration*1000)).Wait();
 
         OverrideTargetSpeed = Vector3.zero;
+
+        LookForward = _oldlook;
 
         Task.Delay(Mathf.RoundToInt(PlayerRollCooldown*1000)).Wait();
 
