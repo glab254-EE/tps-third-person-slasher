@@ -73,7 +73,6 @@ public class EnemyAI : MonoBehaviour
 }*/
 
 using System.Collections;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -87,6 +86,7 @@ public class EnemyAI : MonoBehaviour
 
     private NavMeshAgent _agent;
     private Transform _player;
+    private Animator _animator;
     private bool _isActive = false;
     private bool _isAttacking = false;
     private bool _isPlayerInTrigger = false;
@@ -94,6 +94,7 @@ public class EnemyAI : MonoBehaviour
     void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
+        _animator = GetComponent<Animator>();
         StartCoroutine(FollowRoutine());
     }
 
@@ -150,8 +151,9 @@ public class EnemyAI : MonoBehaviour
         _agent.updateRotation = false;
 
         Debug.Log("Атака!");
-        // animator.SetTrigger("Attack");
+        _animator.SetTrigger("EnemyAtack");
         yield return new WaitForSeconds(attackDuration);
+        _animator.SetTrigger("StayAnimForEnemy");
 
         if (_player != null)
         {
