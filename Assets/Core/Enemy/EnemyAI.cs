@@ -110,10 +110,10 @@ public class EnemyAI : MonoBehaviour
         _isActive = true;
     }
 
-    public void DeActivate(Transform target)
+    /*public void DeActivate(Transform target)
     {
         _isActive = false;
-    }
+    }*/
 
     IEnumerator MainCoroutine()
     {
@@ -121,6 +121,7 @@ public class EnemyAI : MonoBehaviour
         {
             if (_isActive && _player != null && !_isPlayerInTrigger && !_isAttacking && _agent.isActiveAndEnabled)
             {
+                _animator.SetBool("EnemyWalk", true);
                 _agent.SetDestination(_player.position);
             }
             yield return new WaitForSeconds(updateInterval);
@@ -144,6 +145,8 @@ public class EnemyAI : MonoBehaviour
 
             if (!_isAttacking)
             {
+                _animator.SetBool("EnemyWalk", false);
+                _animator.SetTrigger("StayAnimForEnemy");
                 StartCoroutine(AttackSequence());
             }
         }
@@ -153,6 +156,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            //_animator.SetBool("EnemyWalk", true);
             _isPlayerInTrigger = false;
         }
     }
