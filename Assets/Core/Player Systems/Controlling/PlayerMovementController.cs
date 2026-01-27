@@ -35,6 +35,8 @@ public class PlayerMovementController : MonoBehaviour
     [field:SerializeField]
     private float PlayerRollDuration = 1f;
     [field:SerializeField]
+    private float PlayerRollForceDuration = 1f;
+    [field:SerializeField]
     private float PlayerRollCooldown = 1f;
     internal bool LookForward = false;
     internal bool CanMove {get;private set;} = true;
@@ -137,9 +139,11 @@ public class PlayerMovementController : MonoBehaviour
 
         OverrideTargetSpeed = _targetSpeed;
 
-        Task.Delay(Mathf.RoundToInt(PlayerRollDuration*1000)).Wait();
+        Task.Delay(Mathf.RoundToInt(PlayerRollForceDuration*1000)).Wait();
 
         OverrideTargetSpeed = Vector3.zero;
+
+        Task.Delay(Mathf.RoundToInt(PlayerRollDuration*1000)).Wait();
 
         LookForward = _oldlook;
 

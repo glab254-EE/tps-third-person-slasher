@@ -4,7 +4,7 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
-    [Header("Настройки")]
+    [Header("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
     [SerializeField] private float updateInterval = 0.3f;
     [SerializeField] private float atackInterval = 3f;
 
@@ -66,7 +66,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (!_isAttacking) return;
 
-        Debug.Log("Бью игрока!");
+        Debug.Log("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ!");
 
         Invoke("Attack", atackInterval);
     }
@@ -76,9 +76,13 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(NavMeshAgent))]
 public class EnemyAI : MonoBehaviour
 {
-    [Header("Настройки")]
+    [Header("Set-up")]
+    [SerializeField] private EnemyHealth enemyHealth;
+    [Header("Settings")]
     [SerializeField] private float updateInterval = 0.3f;
     [SerializeField] private float attackDuration = 1.5f;
     [SerializeField] private float attackCooldown = 0.5f;
@@ -90,14 +94,16 @@ public class EnemyAI : MonoBehaviour
     private bool _isActive = false;
     private bool _isAttacking = false;
     private bool _isPlayerInTrigger = false;
-
     void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
-        StartCoroutine(FollowRoutine());
+        StartCoroutine(MainCoroutine());
     }
-
+    void Update()
+    {
+        HandleAnimations();
+    }
     public void Activate(Transform target)
     {
         _player = target;
@@ -109,7 +115,7 @@ public class EnemyAI : MonoBehaviour
         _isActive = false;
     }
 
-    IEnumerator FollowRoutine()
+    IEnumerator MainCoroutine()
     {
         while (true)
         {
@@ -120,7 +126,16 @@ public class EnemyAI : MonoBehaviour
             yield return new WaitForSeconds(updateInterval);
         }
     }
-
+    void HandleAnimations()
+    {
+        if (_agent.velocity.magnitude > 0)
+        {
+            _animator.SetBool("Walking",true);
+        } else
+        {
+            _animator.SetBool("Walking",false);
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player") && _isActive)
@@ -150,7 +165,6 @@ public class EnemyAI : MonoBehaviour
         bool originalUpdateRotation = _agent.updateRotation;
         _agent.updateRotation = false;
 
-        Debug.Log("Атака!");
         _animator.SetTrigger("EnemyAtack");
         yield return new WaitForSeconds(attackDuration);
         _animator.SetTrigger("StayAnimForEnemy");
@@ -171,7 +185,6 @@ public class EnemyAI : MonoBehaviour
                 }
                 transform.rotation = targetRotation;
             }
-            Debug.Log("Повернулись");
         }
 
         yield return new WaitForSeconds(attackCooldown);
