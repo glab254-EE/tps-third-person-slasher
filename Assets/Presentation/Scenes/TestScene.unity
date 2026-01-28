@@ -765,6 +765,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2470262804105637303, guid: 8cfcfe3367249a646b8c1ffa3955f036, type: 3}
+      propertyPath: MaxHealth
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3368029921070319334, guid: 8cfcfe3367249a646b8c1ffa3955f036, type: 3}
       propertyPath: m_Name
       value: PlayerPackage

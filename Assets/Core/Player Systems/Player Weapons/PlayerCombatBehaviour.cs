@@ -45,6 +45,7 @@ public class PlayerCombatBehaviour : MonoBehaviour
     }
     void Update()
     {
+        if (HealthHandler.Health <= 0) return;
         HandleToolVisual();
         if (CanAttack && CurrentTool != null)
         {
