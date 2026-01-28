@@ -1,77 +1,3 @@
-/*using System.Collections;
-using UnityEngine;
-using UnityEngine.AI;
-
-public class EnemyAI : MonoBehaviour
-{
-    [Header("���������")]
-    [SerializeField] private float updateInterval = 0.3f;
-    [SerializeField] private float atackInterval = 3f;
-
-    private NavMeshAgent _agent;
-    private Transform _player;
-    private bool _isActive = false;
-    private bool _isAttacking = false;
-
-    void Start()
-    {
-        _agent = GetComponent<NavMeshAgent>();
-        StartCoroutine(FollowRoutine());
-    }
-
-    public void Activate(Transform target)
-    {
-        _player = target;
-        _isActive = true;
-    }
-
-    public void DeActivate(Transform target)
-    {
-        _isActive = false;
-    }
-
-    IEnumerator FollowRoutine()
-    {
-        while (true)
-        {
-            if (_isActive && _player != null && _agent.isActiveAndEnabled)
-            {
-                _agent.SetDestination(_player.position);
-            }
-            yield return new WaitForSeconds(updateInterval);
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player") && !_isAttacking)
-        {
-            _isAttacking = true;
-            _agent.isStopped = true;
-            Attack();
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            CancelInvoke("Attack");
-            _isAttacking = false;
-            _agent.isStopped = false;
-        }
-    }
-
-    void Attack()
-    {
-        if (!_isAttacking) return;
-
-        Debug.Log("��� ������!");
-
-        Invoke("Attack", atackInterval);
-    }
-}*/
-
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -156,7 +82,6 @@ public class EnemyAI : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            //_animator.SetBool("EnemyWalk", true);
             _isPlayerInTrigger = false;
         }
     }
@@ -191,10 +116,9 @@ public class EnemyAI : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(attackCooldown);
-
         if (_isPlayerInTrigger && _player != null)
         {
+            yield return new WaitForSeconds(attackCooldown);
             _isAttacking = false;
             StartCoroutine(AttackSequence());
         }
