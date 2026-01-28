@@ -11,7 +11,7 @@ public class PlayerHealthHandler : MonoBehaviour, IDamagable
     internal bool Godded {get;private set;}
     internal double Health {get;private set;}
     internal event Action<double> OnDamaged;
-    void Start()
+    void Awake()
     {
         Health = MaxHealth;
     }
