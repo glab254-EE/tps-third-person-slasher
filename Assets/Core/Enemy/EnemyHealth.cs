@@ -19,7 +19,7 @@ public class EnemyHealth : MonoBehaviour, IDamagable
             return false;
         }
         Health -= damage;
-        OnDamaged.Invoke(Health);
+        OnDamaged?.Invoke(Health);
         #if UNITY_EDITOR
         Debug.Log(Health);
         #endif

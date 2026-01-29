@@ -35,7 +35,11 @@ public class EnemyAI : MonoBehaviour
     {
         while (true)
         {
-            if (enemyHealth.Health <= 0) yield break;
+            if (enemyHealth.Health <= 0)
+            {
+                Destroy(gameObject);
+                yield break;
+            }
             if (_isActive && _player != null && !_isPlayerInTrigger && !_isAttacking && _agent.isActiveAndEnabled)
             {
                 _animator.SetBool("EnemyWalk", true);

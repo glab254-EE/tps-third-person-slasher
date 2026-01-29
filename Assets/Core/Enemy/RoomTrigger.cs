@@ -12,6 +12,11 @@ public class RoomTrigger : MonoBehaviour
             foreach (var enemy in enemiesInRoom)
             {
                 enemy.Activate(other.transform);
+
+                if (!enemy.gameObject.activeInHierarchy)
+                {
+                    enemy.gameObject.SetActive(true);
+                }
             }
         }
     }

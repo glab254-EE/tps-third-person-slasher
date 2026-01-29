@@ -177,6 +177,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 26617fb944ad40e4ba7e6bc8da6ff2e4, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 6837083500510121345, guid: 26617fb944ad40e4ba7e6bc8da6ff2e4, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -230,19 +234,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c89c507f907f1404383e95ba4a1b25eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovementController
-  animator: {fileID: 0}
+  animator: {fileID: 7288757564375437424}
   listener: {fileID: 0}
   cameraBehaviour: {fileID: 0}
-  playerHealth: {fileID: 0}
+  playerHealth: {fileID: 8355706003530444042}
   ToggleLookForwardBind: {fileID: -343172962489284940, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   RollKey: {fileID: -7471211009204490832, guid: 289c1b55c9541489481df5cc06664110, type: 3}
+  DefaultEnabledState: 1
   MoveAnimationThreshold: 0.3
-  PlayerMaxSpeed: 2.5
+  PlayerMaxSpeed: 4
   PlayerAcceloration: 4
   PlayerTurnSpeed: 10
-  PlayerRollSpeed: 15
+  PlayerRollSpeed: 25
   PlayerRollDuration: 0.25
-  PlayerRollForceDuration: 1
+  PlayerRollForceDuration: 0.2
   PlayerRollCooldown: 2
 --- !u!114 &8355706003530444042
 MonoBehaviour:
@@ -256,7 +261,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85c2ebf0eb301ac4682d073ba5f43936, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthHandler
-  MaxHealth: 10
+  MaxHealth: 5
   GoddedTimerMilisec: 100
 --- !u!114 &77837184391549012
 MonoBehaviour:
@@ -283,7 +288,7 @@ MonoBehaviour:
   DeadAnimationBoolName: Dead
   defaultAnimator: {fileID: 9100000, guid: 3d6dde960973f3a46a3cff5422bf5682, type: 2}
   AvailableTools: []
-  CurrentTool: {fileID: 0}
+  CurrentTool: {fileID: 11400000, guid: 30a101f7e1331e34fbc084f0d6a55bdb, type: 2}
 --- !u!114 &7288757564375437424
 MonoBehaviour:
   m_ObjectHideFlags: 0
