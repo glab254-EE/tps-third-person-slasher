@@ -4,9 +4,8 @@ using UnityEngine;
 public class CameraBehaviour : MonoBehaviour
 {
     [field:SerializeField]
-    internal bool CameraControlsEnabled = true;
-    [field:SerializeField]
     internal bool CameraLocked = false;
+    internal bool CameraControlsEnabled = true;
     private CinemachineInputAxisController controller;
     void Start()
     {

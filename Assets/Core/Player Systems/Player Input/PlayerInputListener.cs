@@ -12,7 +12,7 @@ public class PlayerInputListener : MonoBehaviour
     internal Transform CameraTransform {get; private set;}
     internal Vector2 AxisOutput {get;private set;}= new();
     internal Vector3 MovementVector3 {get;private set;}= new();
-    internal bool MouseLocked {get;private set;} = false;
+    internal bool MouseLocked = false;
     private Dictionary<InputActionReference,Dictionary<string,UnityAction<InputAction.CallbackContext,bool>>> Connections = new();
     private InputSystem_Actions inputActions;
     void Start()
