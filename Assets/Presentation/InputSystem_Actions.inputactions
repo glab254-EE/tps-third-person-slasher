@@ -354,7 +354,7 @@
                 {
                     "name": "",
                     "id": "762a5d14-c43f-42c8-8b5c-9879805c7429",
-                    "path": "<Keyboard>/rightAlt",
+                    "path": "<Keyboard>/tab",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
@@ -365,7 +365,7 @@
                 {
                     "name": "",
                     "id": "f2e9ba44-c423-42a7-ad56-f20975884794",
-                    "path": "<Keyboard>/leftShift",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",

@@ -20,6 +20,8 @@ public class PlayerMovementController : MonoBehaviour
     private InputActionReference ToggleLookForwardBind;
     [field:SerializeField]
     private InputActionReference RollKey;
+    [field:SerializeField]
+    private bool DefaultEnabledState = true;
     [Header("Animations")]
     [field:SerializeField]
     private float MoveAnimationThreshold = 0.1f;
@@ -47,6 +49,7 @@ public class PlayerMovementController : MonoBehaviour
     private Rigidbody rb;
     void Start()
     {
+        listener.MouseLocked = DefaultEnabledState;
         playerHealth.OnDamaged += OnPlayerDamaged;
         rb = GetComponent<Rigidbody>();
         listener.ConnectEventToKeybind(ToggleLookForwardBind,ToggleLookForward);

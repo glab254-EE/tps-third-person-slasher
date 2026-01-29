@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerCombatBehaviour : MonoBehaviour
 {
@@ -134,9 +136,15 @@ public class PlayerCombatBehaviour : MonoBehaviour
         if (newHealth <= 0 && DeadAnimationBoolName != null)
         {
             PlayerAnimatorHandler.SetAnimatorBool(DeadAnimationBoolName,true);
+            Task.Run(DeathTask);
         } else
         {
             PlayerAnimatorHandler.SetAnimatorTrigger(HurtAnimationTriggerName);            
         }
+    }
+    async Task DeathTask()
+    {
+        await Task.Delay(2000);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

@@ -1,77 +1,3 @@
-/*using System.Collections;
-using UnityEngine;
-using UnityEngine.AI;
-
-public class EnemyAI : MonoBehaviour
-{
-    [Header("���������")]
-    [SerializeField] private float updateInterval = 0.3f;
-    [SerializeField] private float atackInterval = 3f;
-
-    private NavMeshAgent _agent;
-    private Transform _player;
-    private bool _isActive = false;
-    private bool _isAttacking = false;
-
-    void Start()
-    {
-        _agent = GetComponent<NavMeshAgent>();
-        StartCoroutine(FollowRoutine());
-    }
-
-    public void Activate(Transform target)
-    {
-        _player = target;
-        _isActive = true;
-    }
-
-    public void DeActivate(Transform target)
-    {
-        _isActive = false;
-    }
-
-    IEnumerator FollowRoutine()
-    {
-        while (true)
-        {
-            if (_isActive && _player != null && _agent.isActiveAndEnabled)
-            {
-                _agent.SetDestination(_player.position);
-            }
-            yield return new WaitForSeconds(updateInterval);
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player") && !_isAttacking)
-        {
-            _isAttacking = true;
-            _agent.isStopped = true;
-            Attack();
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            CancelInvoke("Attack");
-            _isAttacking = false;
-            _agent.isStopped = false;
-        }
-    }
-
-    void Attack()
-    {
-        if (!_isAttacking) return;
-
-        Debug.Log("��� ������!");
-
-        Invoke("Attack", atackInterval);
-    }
-}*/
-
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -83,9 +9,9 @@ public class EnemyAI : MonoBehaviour
     [Header("Set-up")]
     [SerializeField] private EnemyHealth enemyHealth;
     [Header("Settings")]
+    [field: SerializeField] private AttackSettings attackSetting;
+    [SerializeField] private LayerMask playerMask;
     [SerializeField] private float updateInterval = 0.3f;
-    [SerializeField] private float attackDuration = 1.5f;
-    [SerializeField] private float attackCooldown = 0.5f;
     [SerializeField] private float rotationSpeed = 8f;
 
     private NavMeshAgent _agent;
@@ -100,41 +26,26 @@ public class EnemyAI : MonoBehaviour
         _animator = GetComponent<Animator>();
         StartCoroutine(MainCoroutine());
     }
-    void Update()
-    {
-        HandleAnimations();
-    }
     public void Activate(Transform target)
     {
         _player = target;
         _isActive = true;
     }
-
-    /*public void DeActivate(Transform target)
-    {
-        _isActive = false;
-    }*/
-
     IEnumerator MainCoroutine()
     {
         while (true)
         {
+            if (enemyHealth.Health <= 0)
+            {
+                Destroy(gameObject);
+                yield break;
+            }
             if (_isActive && _player != null && !_isPlayerInTrigger && !_isAttacking && _agent.isActiveAndEnabled)
             {
                 _animator.SetBool("EnemyWalk", true);
                 _agent.SetDestination(_player.position);
             }
             yield return new WaitForSeconds(updateInterval);
-        }
-    }
-    void HandleAnimations()
-    {
-        if (_agent.velocity.magnitude > 0)
-        {
-            _animator.SetBool("Walking",true);
-        } else
-        {
-            _animator.SetBool("Walking",false);
         }
     }
     private void OnTriggerEnter(Collider other)
@@ -156,7 +67,6 @@ public class EnemyAI : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            //_animator.SetBool("EnemyWalk", true);
             _isPlayerInTrigger = false;
         }
     }
@@ -167,10 +77,28 @@ public class EnemyAI : MonoBehaviour
         _agent.isStopped = true;
 
         bool originalUpdateRotation = _agent.updateRotation;
+
+        if (enemyHealth.Health <= 0) yield break;
+
         _agent.updateRotation = false;
 
         _animator.SetTrigger("EnemyAtack");
-        yield return new WaitForSeconds(attackDuration);
+        yield return new WaitForSeconds(attackSetting.AttackWindupTime);
+
+        Vector3 hitboxOrigin = transform.position;
+
+        hitboxOrigin += transform.forward * attackSetting.HitboxOffset.z;
+        hitboxOrigin += transform.right * attackSetting.HitboxOffset.x;
+        hitboxOrigin += transform.up * attackSetting.HitboxOffset.y;
+
+        bool haveHitPlayer = StatcHitboxCreator.TryHitWithBoxHitbox(hitboxOrigin, attackSetting.HitboxSize, playerMask, attackSetting.Damage, true, transform.rotation);
+
+        if (haveHitPlayer)
+        {
+            Debug.Log("Hit");
+        }
+
+        yield return new WaitForSeconds(attackSetting.Duration);
         _animator.SetTrigger("StayAnimForEnemy");
 
         if (_player != null)
@@ -191,10 +119,9 @@ public class EnemyAI : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(attackCooldown);
-
         if (_isPlayerInTrigger && _player != null)
         {
+            yield return new WaitForSeconds(attackSetting.Cooldown);
             _isAttacking = false;
             StartCoroutine(AttackSequence());
         }
