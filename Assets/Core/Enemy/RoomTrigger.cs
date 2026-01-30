@@ -13,10 +13,10 @@ public class RoomTrigger : MonoBehaviour
             {
                 enemy.Activate(other.transform);
 
-                if (!enemy.gameObject.activeInHierarchy)
-                {
-                    enemy.gameObject.SetActive(true);
-                }
+                /*if (!enemy.gameObject.activeInHierarchy)      //Edited
+                {                                               //Edited
+                    enemy.gameObject.SetActive(true);           //Edited
+                }*/                                             //Edited
             }
         }
     }

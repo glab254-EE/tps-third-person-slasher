@@ -1,9 +1,12 @@
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHealthHandler : MonoBehaviour, IDamagable
 {
+    [SerializeField] private Image HealthImage; //Edited
+
     [field:SerializeField]
     private double MaxHealth = 10;
     [field:SerializeField]
@@ -14,6 +17,8 @@ public class PlayerHealthHandler : MonoBehaviour, IDamagable
     void Awake()
     {
         Health = MaxHealth;
+
+        HealthImage.fillAmount = (float)(Health / MaxHealth); //Edited
     }
     public bool TryDamage(double damage)
     {
@@ -22,6 +27,9 @@ public class PlayerHealthHandler : MonoBehaviour, IDamagable
             return false;
         }
         Health -= damage;
+
+        HealthImage.fillAmount = (float)(Health / MaxHealth); //Edited
+
         Godded = true;
         Task.Run(GoddedTask);
         OnDamaged.Invoke(Health);
